@@ -1,0 +1,13 @@
+[Unit]
+Description=Waggle Create Node ID Service
+After=syslog.service network.target
+Wants=syslog.service network.target
+ConditionPathExists=!/etc/waggle/node-id
+
+[Service]
+ExecStart=/usr/bin/waggle_nodeid.py
+Type=oneshot
+RemainAfterExit=yes
+
+[Install]
+WantedBy=default.target

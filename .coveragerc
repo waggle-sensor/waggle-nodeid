@@ -1,0 +1,10 @@
+[run]
+omit=tests/*,/usr/*
+
+[report]
+show_missing=True
+fail_under=90
+precision=1
+exclude_lines =
+    pragma: no cover
+    raise
