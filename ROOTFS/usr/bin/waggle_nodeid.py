@@ -54,9 +54,17 @@ def generate_node_id(interface=None):
     # build a network interface list to try
     ## provided option
     intf_options = [interface]
-    ## default route interface
-    result = subprocess.run(["ip", "route", "show", "default"], stdout=subprocess.PIPE)
-    intf_options += [result.stdout.decode("utf-8").split(" ")[4]]
+    ## default ip route interface
+    try:
+        result = subprocess.run(
+            ["ip", "route", "show", "default"], stdout=subprocess.PIPE
+        )
+        intf_options += [result.stdout.decode("utf-8").split(" ")[4]]
+    except Exception as e:
+        logger.warning(
+            f"Unable to include 'ip route default' as candidate network interface. Error: {str(e)}"
+        )
+        pass
     logger.info(f"Candidate network interfaces: {intf_options}")
 
     # test the network interface array
