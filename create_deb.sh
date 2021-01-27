@@ -8,7 +8,7 @@ ARCH=all
 mkdir -p ${BASEDIR}/DEBIAN
 cat <<EOF > ${BASEDIR}/DEBIAN/control
 Package: ${NAME}
-Version: ${VERSION}
+Version: ${VERSION_LONG}
 Maintainer: sagecontinuum.org
 Description: Service to create the node's ID file
 Architecture: ${ARCH}
@@ -22,5 +22,5 @@ cp -p deb/install/postinst ${BASEDIR}/DEBIAN/
 cp -r ROOTFS/* ${BASEDIR}/
 
 # build deb
-dpkg-deb --root-owner-group --build ${BASEDIR} "${NAME}_${VERSION}_${ARCH}.deb"
+dpkg-deb --root-owner-group --build ${BASEDIR} "${NAME}_${VERSION_SHORT}_${ARCH}.deb"
 mv *.deb /output/
