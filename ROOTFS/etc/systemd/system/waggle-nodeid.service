@@ -1,7 +1,7 @@
 [Unit]
 Description=Waggle Create Node ID Service
-After=syslog.service network-online.target
-Wants=syslog.service network-online.target
+After=network-online.target
+Wants=network-online.target
 ConditionPathExists=!/etc/waggle/node-id
 
 [Service]
