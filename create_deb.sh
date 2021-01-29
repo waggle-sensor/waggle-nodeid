@@ -13,6 +13,7 @@ Maintainer: sagecontinuum.org
 Description: Service to create the node's ID file
 Architecture: ${ARCH}
 Priority: optional
+Depends: python3-click, iproute2
 EOF
 
 # add control files
