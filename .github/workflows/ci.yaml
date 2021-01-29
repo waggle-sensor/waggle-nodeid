@@ -14,4 +14,4 @@ jobs:
     - name: run tests and coverage
       run: |
         docker build -t waggle_nodeid_test .
-        docker run --rm waggle_nodeid_test /bin/bash -c 'service rsyslog start && coverage run -m pytest -v && coverage report -m'
+        docker run --rm waggle_nodeid_test /bin/bash -c 'coverage run -m pytest -v && coverage report -m'

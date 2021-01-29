@@ -29,9 +29,6 @@ def test_no_config_route_intf():
     result = runner.invoke(main)
     assert result.exit_code == 0
 
-    # assert the log file exists
-    assert Path("/var/log/waggle/waggle.log").exists()
-
     # assert the node-id file exists
     assert Path("/etc/waggle/node-id").exists()
 

@@ -3,17 +3,12 @@
 import click
 import configparser
 import logging
-import logging.handlers
 import os
 import subprocess
 import uuid
 from pathlib import Path
 
-logger = logging.getLogger("waggle-nodeid")
-logger.setLevel(logging.DEBUG)
-handler = logging.handlers.SysLogHandler(address="/dev/log")
-handler.setFormatter(logging.Formatter("waggle-nodeid: %(message)s"))
-logger.addHandler(handler)
+logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 def_config = "/etc/sage/config.ini"
 nodeid_file = "/etc/waggle/node-id"
@@ -33,7 +28,7 @@ def netintf_mac(interface):
     if interface and intpath.exists():
         result = intpath.read_text().strip()
 
-    logger.info(f"Network interface [{interface}] MAC address: [{result}]")
+    logging.info(f"Network interface [{interface}] MAC address: [{result}]")
     return result
 
 
@@ -49,7 +44,7 @@ def generate_node_id(interface=None):
     Returns:
         none
     """
-    logger.info(f"Generate the Node ID [net interface: {interface}]")
+    logging.info(f"Generate the Node ID [net interface: {interface}]")
 
     # build a network interface list to try
     ## provided option
@@ -61,19 +56,19 @@ def generate_node_id(interface=None):
         )
         intf_options += [result.stdout.decode("utf-8").split(" ")[4]]
     except Exception as e:
-        logger.warning(
+        logging.warning(
             f"Unable to include 'ip route default' as candidate network interface. Error: {str(e)}"
         )
         pass
-    logger.info(f"Candidate network interfaces: {intf_options}")
+    logging.info(f"Candidate network interfaces: {intf_options}")
 
     # test the network interface array
     for netint in intf_options:
-        logger.info(f"Attempting network interface [{netint}]")
+        logging.info(f"Attempting network interface [{netint}]")
         mac = netintf_mac(netint)
         if mac:
             nodeid = mac.replace(":", "").rjust(16, "0")
-            logger.info(
+            logging.info(
                 f"Generated Node ID [{nodeid}] from network interface [{netint}]"
             )
             return nodeid
@@ -81,7 +76,7 @@ def generate_node_id(interface=None):
     # network interfaces did not yeild a good result, generate the node ID
     #  prepend with 'F' to indicate generated value
     nodeid = ("%012X" % uuid.getnode()).rjust(16, "F")
-    logger.warning(f"Generated Node ID [{nodeid}] from UUID library")
+    logging.warning(f"Generated Node ID [{nodeid}] from UUID library")
     return nodeid
 
 
@@ -91,7 +86,7 @@ def generate_node_id(interface=None):
 )
 def main(config_file):
 
-    logger.info(f"Waggle Node ID Start [config: {config_file}]")
+    logging.info(f"Waggle Node ID Start [config: {config_file}]")
 
     netint = None
     node_id_override = None
@@ -106,14 +101,14 @@ def main(config_file):
         netint = config["hardware"].get("wlan-interface")
 
     if node_id_override:
-        logger.info(
+        logging.info(
             f"Use override node-id [{node_id_override}] from config file [{config_file}]"
         )
         nodeid = node_id_override
     else:
         nodeid = generate_node_id(netint)
 
-    logger.info(f"Saving Node ID [{nodeid}] to file [{nodeid_file}]")
+    logging.info(f"Saving Node ID [{nodeid}] to file [{nodeid_file}]")
     Path(os.path.dirname(nodeid_file)).mkdir(parents=True, exist_ok=True)
     with open(nodeid_file, "w") as nf:
         nf.write(nodeid.upper())
