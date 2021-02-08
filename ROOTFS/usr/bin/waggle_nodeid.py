@@ -10,9 +10,9 @@ from pathlib import Path
 
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 
-def_config = "/etc/sage/config.ini"
+def_config = "/etc/waggle/config.ini"
 nodeid_file = "/etc/waggle/node-id"
-
+software_version = "{{VERSION}}"
 
 def netintf_mac(interface):
     """Return the network interfaces MAC address; else None
@@ -84,7 +84,12 @@ def generate_node_id(interface=None):
 @click.option(
     "-c", "--config", "config_file", default=def_config, help="config file to use"
 )
-def main(config_file):
+@click.option('--version', is_flag=True)
+def main(config_file, version):
+
+    if version:
+        print(f"version: {software_version}")
+        exit(0)
 
     logging.info(f"Waggle Node ID Start [config: {config_file}]")
 

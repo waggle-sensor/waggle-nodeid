@@ -20,7 +20,10 @@ EOF
 cp -p deb/install/postinst ${BASEDIR}/DEBIAN/
 
 # add core files
-cp -r ROOTFS/* ${BASEDIR}/
+cp -r ROOTFS/etc ${BASEDIR}/
+mkdir -p ${BASEDIR}/usr/bin
+sed -e "s/{{VERSION}}/${VERSION_LONG}/; w ${BASEDIR}/usr/bin/waggle_nodeid.py" ./ROOTFS/usr/bin/waggle_nodeid.py
+chmod +x ${BASEDIR}/usr/bin/waggle_nodeid.py
 
 # build deb
 dpkg-deb --root-owner-group --build ${BASEDIR} "${NAME}_${VERSION_SHORT}_${ARCH}.deb"

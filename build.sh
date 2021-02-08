@@ -1,5 +1,7 @@
 #!/bin/bash -e
 
+
+
 print_help() {
   echo """
 usage: build.sh [-f]
