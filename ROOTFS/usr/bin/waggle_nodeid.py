@@ -96,14 +96,18 @@ def main(config_file, version):
     netint = None
     node_id_override = None
 
-    config = configparser.ConfigParser()
-    config.read(config_file)
+    if Path(config_file).exists():
+        logging.info(f"Reading {config_file}...")
+        config = configparser.ConfigParser()
+        config.read(config_file)
 
-    if "system" in config:
-        node_id_override = config["system"].get("node-id-override")
+        if "system" in config:
+            node_id_override = config["system"].get("node-id-override")
 
-    if "hardware" in config:
-        netint = config["hardware"].get("wlan-interface")
+        if "hardware" in config:
+            netint = config["hardware"].get("wlan-interface")
+    else:
+        logging.info(f"File {config_file} not found.")
 
     if node_id_override:
         logging.info(
