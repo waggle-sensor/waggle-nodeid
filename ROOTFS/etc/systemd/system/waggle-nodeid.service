@@ -1,13 +1,13 @@
 [Unit]
 Description=Waggle Create Node ID Service
-After=network-online.target
-Wants=network-online.target
+#After=network-online.target
+#Wants=network-online.target
 ConditionPathExists=!/etc/waggle/node-id
 
 [Service]
 ExecStart=/usr/bin/waggle_nodeid.py
-Type=oneshot
-RemainAfterExit=yes
+#Type=oneshot
+#RemainAfterExit=yes
 
 [Install]
 WantedBy=default.target
