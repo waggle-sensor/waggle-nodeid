@@ -11,8 +11,9 @@ from pathlib import Path
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 def_config = "/etc/waggle/config.ini"
-nodeid_file = "/etc/waggle/node-id"
+nodeid_file_default = "/etc/waggle/node-id"
 software_version = "{{VERSION}}"
+
 
 def netintf_mac(interface):
     """Return the network interfaces MAC address; else None
@@ -92,6 +93,7 @@ def main(config_file, version):
 
     netint = None
     node_id_override = None
+    nodeid_file = nodeid_file_default
 
     if Path(config_file).exists():
         logging.info(f"Reading {config_file}...")
@@ -100,6 +102,7 @@ def main(config_file, version):
 
         if "system" in config:
             node_id_override = config["system"].get("node-id-override")
+            nodeid_file = config["system"].get("nodeid-file", nodeid_file_default)
 
         if "hardware" in config:
             netint = config["hardware"].get("wlan-interface")
