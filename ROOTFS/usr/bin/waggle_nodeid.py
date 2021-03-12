@@ -81,11 +81,11 @@ def generate_node_id(interface=None):
 
 
 @click.command()
-@click.version_option(version=software_version, message=f'version: %(version)s')
+@click.version_option(version=software_version, message=f"version: %(version)s")
 @click.option(
     "-c", "--config", "config_file", default=def_config, help="config file to use"
 )
-@click.option('--version', is_flag=True)
+@click.option("--version", is_flag=True)
 def main(config_file, version):
 
     logging.info(f"Waggle Node ID Start [config: {config_file}]")
