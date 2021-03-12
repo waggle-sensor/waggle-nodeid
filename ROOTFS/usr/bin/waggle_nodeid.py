@@ -115,6 +115,11 @@ def main(config_file, version):
         )
         nodeid = node_id_override
     else:
+        if Path(nodeid_file).exists():
+            logging.info(
+                f"Skipping node ID generation as node ID file [{nodeid_file}] already exists"
+            )
+            sys.exit(0)
         nodeid = generate_node_id(netint)
 
     logging.info(f"Saving Node ID [{nodeid}] to file [{nodeid_file}]")
