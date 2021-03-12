@@ -7,6 +7,7 @@ from ROOTFS.usr.bin.waggle_nodeid import main
 from pathlib import Path
 
 
+todo UNIT TEST
 def test_config_interface():
     """Test valid config specified and used"""
     runner = CliRunner()
