@@ -6,11 +6,8 @@ ConditionPathExists=!/etc/waggle/node-id
 
 [Service]
 ExecStart=/usr/bin/waggle_nodeid.py
-#Type=oneshot
-#RemainAfterExit=yes
 Restart=on-failure
 RestartSec=30
-
 
 [Install]
 WantedBy=default.target
