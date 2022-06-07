@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-import click
 import configparser
 import logging
 import os
@@ -8,11 +7,14 @@ import subprocess
 import uuid
 from pathlib import Path
 
+import click
+
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 
 def_config = "/etc/waggle/config.ini"
 nodeid_file = "/etc/waggle/node-id"
 software_version = "{{VERSION}}"
+
 
 def netintf_mac(interface):
     """Return the network interfaces MAC address; else None
@@ -51,9 +53,7 @@ def generate_node_id(interface=None):
     intf_options = [interface]
     ## default ip route interface
     try:
-        result = subprocess.run(
-            ["ip", "route", "show", "default"], stdout=subprocess.PIPE
-        )
+        result = subprocess.run(["ip", "route", "show", "default"], stdout=subprocess.PIPE)
         intf_options += [result.stdout.decode("utf-8").split(" ")[4]]
     except Exception as e:
         logging.warning(
@@ -68,9 +68,7 @@ def generate_node_id(interface=None):
         mac = netintf_mac(netint)
         if mac:
             nodeid = mac.replace(":", "").rjust(16, "0")
-            logging.info(
-                f"Generated Node ID [{nodeid}] from network interface [{netint}]"
-            )
+            logging.info(f"Generated Node ID [{nodeid}] from network interface [{netint}]")
             return nodeid
 
     # network interfaces did not yeild a good result, generate the node ID
@@ -81,11 +79,9 @@ def generate_node_id(interface=None):
 
 
 @click.command()
-@click.version_option(version=software_version, message=f'version: %(version)s')
-@click.option(
-    "-c", "--config", "config_file", default=def_config, help="config file to use"
-)
-@click.option('--version', is_flag=True)
+@click.version_option(version=software_version, message=f"version: %(version)s")
+@click.option("-c", "--config", "config_file", default=def_config, help="config file to use")
+@click.option("--version", is_flag=True)
 def main(config_file, version):
 
     logging.info(f"Waggle Node ID Start [config: {config_file}]")
@@ -107,9 +103,7 @@ def main(config_file, version):
         logging.info(f"File {config_file} not found.")
 
     if node_id_override:
-        logging.info(
-            f"Use override node-id [{node_id_override}] from config file [{config_file}]"
-        )
+        logging.info(f"Use override node-id [{node_id_override}] from config file [{config_file}]")
         nodeid = node_id_override
     else:
         nodeid = generate_node_id(netint)
