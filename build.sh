@@ -6,4 +6,3 @@ docker run --rm \
   -e "DEPENDS=python3-click, iproute2" \
   -v "$PWD:/repo" \
   waggle/waggle-deb-builder:latest
-  
